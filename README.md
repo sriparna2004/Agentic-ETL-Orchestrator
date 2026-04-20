@@ -1,25 +1,47 @@
-# Agentic-ETL-Orchestrator
-Agentic-ETL-Orchestrator is an AI-native Data Engineering framework that automates the end-to-end lifecycle of ETL/ELT pipeline development. By leveraging LangGraph for multi-agent coordination and the Model Context Protocol (MCP) for real-time data grounding, it transforms unstructured business requirements (e.g., Jira tickets) into production-ready, validated, and deployed PySpark code.
+# 🤖 Agentic-ETL-Orchestrator
+> **Autonomous Data Engineering Agent powered by LangGraph & MCP**
 
-The Problem it Solves
-Traditional ETL development suffers from a "Lost in Translation" effect between business stakeholders and developers, leading to manual coding errors, schema hallucinations, and slow PR cycles. This system removes the human bottleneck by using a "Self-Healing" loop.
+[![GCP](https://img.shields.io/badge/Provider-Google_Cloud-blue?logo=google-cloud)](https://cloud.google.com/)
+[![Python](https://img.shields.io/badge/Python-3.10+-yellow?logo=python)](https://www.python.org/)
+[![Framework](https://img.shields.io/badge/Framework-LangGraph-orange)](https://github.com/langchain-ai/langgraph)
 
-Key Technical Pillars
-Intelligent Grounding (MCP): Unlike standard LLM code generators, this agent "reaches out" to BigQuery via the Model Context Protocol to verify table schemas and data types before writing code, ensuring 100% accuracy.
+---
 
-Autonomous Orchestration: Utilizing LangGraph to manage specialized agents (Parser, Coder, Auditor) that communicate via a shared state, allowing for complex retries and reasoning.
+## 🏗️ System Architecture
+This project implements a **Self-Healing Multi-Agent System** that transforms unstructured business requirements (Jira/UI) into production-ready, audited ETL pipelines.
 
-Shift-Left Quality Control: A dedicated Audit Agent performs static code analysis to eliminate dead code, enforce security (secret detection), and optimize BigQuery costs (no SELECT *).
+![Architecture Diagram](./assets/architecture.png)
 
-Automated DevOps: The system doesn't just write code; it generates unit tests, runs dry-run executions, and raises a fully documented Pull Request with a performance scorecard.
+### 🧩 The 4-Stage Autonomous Flow
+1. **Intake & Analysis:** Extracts intent from Jira and uses **Model Context Protocol (MCP)** to verify schemas in BigQuery.
+2. **Planning & Logic:** Orchestrates task breakdown via **LangGraph** with a Senior DE "Critique" loop.
+3. **Production Studio:** Generates modular **PySpark** code and performs **Static Code Analysis (SCA)** to prune dead code.
+4. **DevOps & Deployment:** Raises a GitHub PR with automated execution reports and performance scores.
 
-Core Stack
-Orchestration: LangGraph (Stateful Multi-Agent Framework)
+---
 
-LLM: Gemini 1.5 Flash (Vertex AI)
+## 🛠️ Tech Stack
+| Component | Technology |
+| :--- | :--- |
+| **LLM** | Gemini 1.5 Flash (Vertex AI) |
+| **Orchestration** | LangGraph & Pydantic |
+| **Data Grounding** | Model Context Protocol (MCP) |
+| **Processing** | Apache Spark (PySpark) & BigQuery |
+| **Infrastructure** | GCP (Dataproc Serverless, Secret Manager) |
 
-Data Layer: Google BigQuery & Dataproc Serverless (PySpark)
+---
 
-Protocols: Model Context Protocol (MCP)
+## 🚀 Key Features
+* **Zero-Hallucination:** MCP ensures the agent only writes code for columns that actually exist.
+* **Shift-Left Quality:** Automated linting removes unused variables and flags BigQuery anti-patterns.
+* **Self-Correction:** Agents automatically refactor logic if unit tests or audit checks fail.
 
-Governance: Pydantic-based task manifests and YAML-driven engineering standards.
+---
+
+## 📂 Project Structure
+```bash
+├── agents/            # Specialized Agent Nodes (Parser, Auditor, Coder)
+├── config/            # standards.yaml & Framework Constraints
+├── inputs/            # User Stories & Jira Mocks
+├── notebooks/         # Prototyping & Connectivity Tests
+└── README.md
