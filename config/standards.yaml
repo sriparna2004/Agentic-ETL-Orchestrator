@@ -1,0 +1,41 @@
+# Agentic-ETL-Orchestrator: Engineering Standards & Governance
+version: "1.0"
+
+spark_config:
+  version: "3.4"
+  default_format: "delta"
+  forbidden_methods:
+    - ".collect()"     # Prevents Driver OOM errors
+    - ".toPandas()"    # Prevents memory crashes on large datasets
+    - "spark.sql('SELECT *')" # Enforces explicit column selection
+  required_optimization:
+    - ".cache()"       # Required if a DataFrame is used > 2 times
+    - ".hint('broadcast')" # Suggest for small-to-large joins
+
+bigquery_rules:
+  project_id_enforcement: "environment_variable" # No hardcoded IDs
+  dataset_naming:
+    raw: "bronze_*"
+    clean: "silver_*"
+    reporting: "gold_*"
+  mandatory_columns:
+    - "etl_inserted_at"
+    - "etl_source_system"
+  query_constraints:
+    require_partition_filter: true
+    max_bytes_billed_limit: 1000000000 # 1GB safety limit
+
+static_analysis:
+  remove_unused_variables: true
+  remove_unused_imports: true
+  check_type_safety: true
+  min_code_quality_score: 0.85
+
+naming_conventions:
+  variable_style: "snake_case"
+  function_style: "snake_case"
+  max_line_length: 100
+
+security:
+  mask_pii_columns: ["email", "ip_address", "phone_number"]
+  allow_hardcoded_secrets: false
