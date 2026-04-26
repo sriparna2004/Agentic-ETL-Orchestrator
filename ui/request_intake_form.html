@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Autonomous ETL Intake</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121a30;
+      --muted: #9cb0d1;
+      --text: #e8efff;
+      --accent: #6aa6ff;
+      --ok: #68d391;
+      --warn: #f6ad55;
+      --border: #223154;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg, #090e1d 0%, #0d1427 100%);
+      color: var(--text);
+    }
+    .container {
+      max-width: 980px;
+      margin: 24px auto;
+      padding: 0 16px 32px;
+    }
+    .header {
+      margin-bottom: 16px;
+    }
+    .header h1 { margin: 0; font-size: 1.6rem; }
+    .header p { margin: 8px 0 0; color: var(--muted); }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    label { font-weight: 600; font-size: 0.92rem; }
+    .help { color: var(--muted); font-size: 0.82rem; }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #31466f;
+      background: #0d1630;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.94rem;
+    }
+    textarea { min-height: 98px; resize: vertical; }
+    .tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0 0;
+    }
+    .tag {
+      border: 1px solid #36578f;
+      color: #cfe1ff;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .secondary { background: #2a3d65; color: #dce8ff; }
+    .primary { background: var(--accent); color: #03132f; }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .pill { font-size: 0.75rem; padding: 3px 8px; border-radius: 999px; }
+    .pill.ok { background: rgba(104, 211, 145, 0.18); color: var(--ok); border: 1px solid rgba(104, 211, 145, 0.45); }
+    .pill.warn { background: rgba(246, 173, 85, 0.18); color: var(--warn); border: 1px solid rgba(246, 173, 85, 0.45); }
+    @media (max-width: 800px) {
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="header">
+      <h1>Autonomous ETL Intake UI (Week 1)</h1>
+      <p>Capture ETL user story details and submit to orchestrator for schema validation, planning, and generation.</p>
+    </section>
+
+    <section class="panel">
+      <div class="field">
+        <label for="preset">Use Case Preset</label>
+        <select id="preset">
+          <option value="">Select one (optional)</option>
+          <option value="us06">US-06: Daily Active Users (DAU)</option>
+          <option value="us07">US-07: Average Engagement per Page</option>
+          <option value="us08">US-08: Regional Traffic Spikes (Hourly)</option>
+        </select>
+        <span class="help">Loads starter values for the approved Week 1 stories.</span>
+      </div>
+    </section>
+
+    <form class="panel">
+      <div class="card-title">
+        <h2 style="margin:0; font-size:1.1rem;">Request Details</h2>
+        <span class="pill ok">Required</span>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="requestName">Request Name</label>
+          <input id="requestName" placeholder="e.g., US-06 Daily Active Users" required />
+        </div>
+        <div class="field">
+          <label for="jira">Jira Number (if any)</label>
+          <input id="jira" placeholder="e.g., CX-142" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="description">Description / User Story</label>
+        <textarea id="description" placeholder="Describe the business need, dimensions, measures, and output expectation."></textarea>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="sourceTables">Source Tables</label>
+          <input id="sourceTables" placeholder="e.g., analytics_123456.events_*" required />
+          <span class="help">Multiple tables can be comma-separated.</span>
+        </div>
+        <div class="field">
+          <label for="outputTable">Output Table (if any)</label>
+          <input id="outputTable" placeholder="e.g., cx_reporting.daily_unique_users" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="scheduleTime">Expected Scheduling Time</label>
+          <input id="scheduleTime" type="time" value="07:00" />
+        </div>
+        <div class="field">
+          <label for="refreshFrequency">Refresh Frequency</label>
+          <select id="refreshFrequency">
+            <option value="daily" selected>Daily</option>
+            <option value="hourly">Hourly</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="timezone">Timezone</label>
+          <select id="timezone">
+            <option value="America/New_York" selected>US Eastern (America/New_York)</option>
+            <option value="UTC">UTC</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="dqThreshold">Null-rate Failure Threshold (%)</label>
+          <input id="dqThreshold" type="number" value="10" min="0" max="100" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="secondary">Save Draft</button>
+        <button type="submit" class="primary">Submit to Orchestrator</button>
+      </div>
+    </form>
+
+    <section class="panel">
+      <div class="card-title">
+        <h2 style="margin:0; font-size:1.1rem;">Improvement Suggestions</h2>
+        <span class="pill warn">Recommended</span>
+      </div>
+      <ul>
+        <li>Add <strong>preview SQL</strong> + estimated bytes scanned before submit.</li>
+        <li>Add <strong>field mapping helper</strong> for GA4 `event_params` extraction.</li>
+        <li>Add <strong>acceptance criteria checklist</strong> (grain, DQ, SLA, idempotency).</li>
+        <li>Add <strong>Jira sync toggle</strong> to post status comments and artifact links automatically.</li>
+        <li>Add <strong>owner/approver</strong> fields for routing and auditability.</li>
+      </ul>
+      <div class="tags">
+        <span class="tag">Orchestrator-ready payload</span>
+        <span class="tag">Eval-friendly metadata</span>
+        <span class="tag">Jira traceability</span>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const presets = {
+      us06: {
+        requestName: 'US-06 Daily Active Users (DAU)',
+        jira: 'CX-DAU-06',
+        description: 'Aggregate unique user_pseudo_id per day grouped by device.category from GA4 raw events into cx_reporting.daily_unique_users.',
+        sourceTables: 'analytics_123456.events_*',
+        outputTable: 'cx_reporting.daily_unique_users',
+        scheduleTime: '07:00',
+        refreshFrequency: 'daily',
+        timezone: 'America/New_York',
+        dqThreshold: 10
+      },
+      us07: {
+        requestName: 'US-07 Average Engagement per Page',
+        jira: 'CX-ENG-07',
+        description: 'For page_view events only, compute AVG(engagement_time_msec) by page_location and store into cx_reporting.page_engagement_stats.',
+        sourceTables: 'analytics_123456.events_*',
+        outputTable: 'cx_reporting.page_engagement_stats',
+        scheduleTime: '07:00',
+        refreshFrequency: 'daily',
+        timezone: 'America/New_York',
+        dqThreshold: 10
+      },
+      us08: {
+        requestName: 'US-08 Regional Traffic Spikes (Hourly)',
+        jira: 'CX-REG-08',
+        description: 'Count total events in 1-hour windows grouped by geo.city and geo.region into cx_reporting.hourly_regional_traffic.',
+        sourceTables: 'analytics_123456.events_*',
+        outputTable: 'cx_reporting.hourly_regional_traffic',
+        scheduleTime: '07:00',
+        refreshFrequency: 'daily',
+        timezone: 'America/New_York',
+        dqThreshold: 10
+      }
+    };
+
+    const formIds = ['requestName', 'jira', 'description', 'sourceTables', 'outputTable', 'scheduleTime', 'refreshFrequency', 'timezone', 'dqThreshold'];
+    document.getElementById('preset').addEventListener('change', (event) => {
+      const selected = presets[event.target.value];
+      if (!selected) return;
+      formIds.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.value = selected[id] ?? '';
+      });
+    });
+  </script>
+</body>
+</html>
