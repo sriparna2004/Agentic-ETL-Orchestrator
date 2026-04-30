@@ -111,19 +111,6 @@
       <p>Capture ETL user story details and submit to orchestrator for schema validation, planning, and generation.</p>
     </section>
 
-    <section class="panel">
-      <div class="field">
-        <label for="preset">Use Case Preset</label>
-        <select id="preset">
-          <option value="">Select one (optional)</option>
-          <option value="us06">US-06: Daily Active Users (DAU)</option>
-          <option value="us07">US-07: Average Engagement per Page</option>
-          <option value="us08">US-08: Regional Traffic Spikes (Hourly)</option>
-        </select>
-        <span class="help">Loads starter values for the approved Week 1 stories.</span>
-      </div>
-    </section>
-
     <form class="panel">
       <div class="card-title">
         <h2 style="margin:0; font-size:1.1rem;">Request Details</h2>
@@ -143,6 +130,7 @@
       <div class="field">
         <label for="description">Description / User Story</label>
         <textarea id="description" placeholder="Describe the business need, dimensions, measures, and output expectation."></textarea>
+        <span class="help">Please include use case details (for example US-06/US-07/US-08) directly in this text area.</span>
       </div>
 
       <div class="row">
@@ -213,52 +201,5 @@
     </section>
   </main>
 
-  <script>
-    const presets = {
-      us06: {
-        requestName: 'US-06 Daily Active Users (DAU)',
-        jira: 'CX-DAU-06',
-        description: 'Aggregate unique user_pseudo_id per day grouped by device.category from GA4 raw events into cx_reporting.daily_unique_users.',
-        sourceTables: 'analytics_123456.events_*',
-        outputTable: 'cx_reporting.daily_unique_users',
-        scheduleTime: '07:00',
-        refreshFrequency: 'daily',
-        timezone: 'America/New_York',
-        dqThreshold: 10
-      },
-      us07: {
-        requestName: 'US-07 Average Engagement per Page',
-        jira: 'CX-ENG-07',
-        description: 'For page_view events only, compute AVG(engagement_time_msec) by page_location and store into cx_reporting.page_engagement_stats.',
-        sourceTables: 'analytics_123456.events_*',
-        outputTable: 'cx_reporting.page_engagement_stats',
-        scheduleTime: '07:00',
-        refreshFrequency: 'daily',
-        timezone: 'America/New_York',
-        dqThreshold: 10
-      },
-      us08: {
-        requestName: 'US-08 Regional Traffic Spikes (Hourly)',
-        jira: 'CX-REG-08',
-        description: 'Count total events in 1-hour windows grouped by geo.city and geo.region into cx_reporting.hourly_regional_traffic.',
-        sourceTables: 'analytics_123456.events_*',
-        outputTable: 'cx_reporting.hourly_regional_traffic',
-        scheduleTime: '07:00',
-        refreshFrequency: 'daily',
-        timezone: 'America/New_York',
-        dqThreshold: 10
-      }
-    };
-
-    const formIds = ['requestName', 'jira', 'description', 'sourceTables', 'outputTable', 'scheduleTime', 'refreshFrequency', 'timezone', 'dqThreshold'];
-    document.getElementById('preset').addEventListener('change', (event) => {
-      const selected = presets[event.target.value];
-      if (!selected) return;
-      formIds.forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) el.value = selected[id] ?? '';
-      });
-    });
-  </script>
 </body>
 </html>

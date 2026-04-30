@@ -6,7 +6,7 @@ Design the first intake UI where a user can submit ETL user stories for autonomo
 ## Implemented Prototype
 - File: `ui/request_intake_form.html`
 - Type: Static HTML prototype (form-first design)
-- Scope: Week 1 user stories (US-06, US-07, US-08) with preset autofill
+- Scope: Generic intake form where users type in use case details directly (including US-06, US-07, US-08 during testing)
 
 ## Included Fields
 1. Request Name
@@ -20,7 +20,7 @@ Design the first intake UI where a user can submit ETL user stories for autonomo
 9. Null-rate threshold
 
 ## UX Features
-- **Preset selector** for US-06/07/08 to reduce manual entry
+- **Free-form user story textbox** for custom use-case details
 - **Save Draft** and **Submit to Orchestrator** actions
 - Built-in **improvement recommendations** section
 
