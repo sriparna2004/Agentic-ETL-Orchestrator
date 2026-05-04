@@ -44,4 +44,25 @@ This project implements a **Self-Healing Multi-Agent System** that transforms un
 ├── config/            # standards.yaml & Framework Constraints
 ├── inputs/            # User Stories & Jira Mocks
 ├── notebooks/         # Prototyping & Connectivity Tests
+├── ui/                # Intake UI prototype (HTML)
+├── docs/              # Use cases and UI design docs
 └── README.md
+
+## 🖥️ Launch the Intake UI Prototype
+The Week 1 intake UI is a static HTML page at:
+
+- `ui/request_intake_form.html`
+
+You can launch it locally with a lightweight Python HTTP server:
+
+```bash
+cd /workspace/Agentic-ETL-Orchestrator
+python3 -m http.server 8000
+```
+
+Then open:
+
+- `http://localhost:8000/ui/request_intake_form.html`
+
+### Alternative (open file directly)
+You can also open `ui/request_intake_form.html` directly in a browser, but running an HTTP server is recommended for consistent behavior.
